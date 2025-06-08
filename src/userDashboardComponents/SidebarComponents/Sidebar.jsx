@@ -1,7 +1,7 @@
 // components/sidebar/Sidebar.jsx
 import React, { useEffect, useState } from "react";
-import SidebarLogo from "./SideBarLogo";
-import SidebarNav from "./SideBarNav";
+import SidebarLogo from "./SidebarLogo";
+import SidebarNav from "./SidebarNav";
 import SidebarSocials from './SidebarSocials'
 import Logout from "../../components/Logout";
 // import { onAuthStateChanged } from "firebase/auth";
