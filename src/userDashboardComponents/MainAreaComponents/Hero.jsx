@@ -36,7 +36,7 @@ const Hero = () => {
 
   return (
     <div
-        className='relative flex flex-col min-h-[350px] p-10 px-18 bg-gradient-to-br from-indigo-600 to-blue-500 overflow-hidden text-white'
+        className='relative flex flex-col min-h-[350px] p-10 px-7 md:px-18 bg-gradient-to-br from-indigo-600 to-blue-500 overflow-hidden text-white'
     >
 
         <div className='relative z-10 flex flex-col gap-1'>

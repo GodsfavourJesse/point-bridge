@@ -33,7 +33,7 @@ export default function TaskPage() {
 
         const script = document.createElement('script');
         script.id = scriptId;
-        script.src = 'https://trianglerockers.com/script_include.php?id=1814407&subid=' + user.uid;
+        script.src = `https://trianglerockers.com/script_include.php?id=1814407&subid=${user.uid}`;
         script.async = true;
 
         script.onload = () => {

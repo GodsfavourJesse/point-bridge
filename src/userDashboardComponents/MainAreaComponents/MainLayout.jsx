@@ -10,23 +10,29 @@ import TaskCard from "../../components/TaskCard";
 import InfoCard from "./InfoCad";
 import Hero from "./Hero";
 
-const MainLayout = ({ username = "JazzDRUM" }) => {
+const MainLayout = ({ username }) => {
     return (
         <main className="flex-1 space-y-6 overflow-y-auto">
-            <div className="relative mb-50">
+            <div className="relative mb-24 w-full">
                 <Hero />
 
-                <div className="absolute bottom-[-80px] flex items-center justify-center gap-10 w-full h-55">
-                    <CurrentBalanceCard />
-                    <ReferralBalanceCard />
+                <div className="absolute bottom-[-80px] w-full flex flex-col items-center justify-center gap-4 md:flex-row md:gap-10">
+                    <div className="block md:hidden">
+                        <CurrentBalanceCard />
+                    </div>
+                    <div className="hidden md:flex gap-10">
+                        <CurrentBalanceCard />
+                        <ReferralBalanceCard />
+                    </div>
                 </div>
             </div>
-            <GreetingsCard username={username} />
-            <ReferralLinkCard />
-            <TaskCard />
-            <InfoCard />
-            <SocialCard />
-            <Footer />
+            <div className="px-4 md:px-6 space-y-6 pt-24 md:pt-0">
+                <GreetingsCard username={username} />
+                <ReferralLinkCard />
+                <TaskCard />
+                <InfoCard />
+                <SocialCard />
+            </div>
         </main>
     );
 };

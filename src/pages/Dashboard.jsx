@@ -22,7 +22,7 @@ function Dashboard() {
 
     return (
         <motion.div 
-            className="flex min-h-screen overflow-hidden"
+            className="flex flex-col md:flex-row min-h-screen overflow-hidden"
             initial={{ opacity: 0, x: -50 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.5, ease: "easeOut" }}
@@ -31,19 +31,25 @@ function Dashboard() {
                 initial={{ x: -100 }}
                 animate={{ x: 0 }}
                 transition={{ duration: 0.5 }}
-                className="w-70 h-full fixed top-0 left-0 bg-white shadow z-20"
+                className="hidden md:block w-64 h-screen fixed top-0 left-0 bg-white shadow z-20"
             >
                 <Sidebar />
             </motion.div>
 
             <motion.div
-                className="ml-70 flex-1 h-full overflow-y-auto"
+                className="flex-1 md:ml-64 overflow-y-auto mb-16 md:mb-0"
                 initial={{ y: 50 }}
                 animate={{ y: 0 }}
                 transition={{ duration: 0.6 }}
             >
                 <Outlet />
             </motion.div>
+
+            {/* Mobile Footer Nav (acts as sidebar on small screens) */}
+            <div className="md:hidden fixed bottom-0 left-0 right-0 bg-white shadow-md z-30 h-16 flex items-center justify-around border-t">
+                {/* You can reuse Sidebar icons here */}
+                <Sidebar isMobile />
+            </div>
 
         </motion.div>
        
