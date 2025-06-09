@@ -46,7 +46,7 @@ function Dashboard() {
             </motion.div>
 
             {/* Mobile Footer Nav (acts as sidebar on small screens) */}
-            <div className="md:hidden fixed bottom-0 left-0 right-0 bg-white shadow-md z-30 h-16 flex items-center justify-around border-t">
+            <div className="md:hidden fixed bottom-0 left-0 right-0 bg-white shadow-md z-30 h-16 flex items-center justify-around ">
                 {/* You can reuse Sidebar icons here */}
                 <Sidebar isMobile />
             </div>

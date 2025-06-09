@@ -10,7 +10,7 @@ const Sidebar = ({ isMobile = false}) => {
 
     if (isMobile) {
         return (
-            <aside className="flex md:hidden w-full h-16 bg-white border-t shadow-inner items-center justify-around px-2">
+            <aside className="flex md:hidden w-full h-16 bg-white shadow-inner items-center justify-around px-2">
                 <SidebarNav isMobile />
             </aside>
         )

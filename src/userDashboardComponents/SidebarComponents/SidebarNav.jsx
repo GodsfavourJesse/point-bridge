@@ -45,7 +45,7 @@ const SidebarNav = ({ isMobile = false }) => {
                     }
                 >
                     
-                    {React.cloneElement(link.icon, { size: isMobile ? 28 : 20 })}
+                    {React.cloneElement(link.icon, { size: isMobile ? 24 : 20 })}
                     {/* Desktop: show text */}
                     {!isMobile && <span className="ml-3 text-[14px]">{link.name}</span>}
 
