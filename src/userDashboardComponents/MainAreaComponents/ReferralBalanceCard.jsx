@@ -50,7 +50,7 @@ const ReferralBalanceCard = () => {
                     <span className="text-sm sm:text-base text-blue-600 font-medium">Pb</span>
                 </div>
 
-                <p className="text-sm text-gray-500 mt-1">Total earnings from completing tasks</p>
+                <p className="text-sm text-gray-500 mt-1">Earned from referring friends</p>
 
                 <button
                     onClick={() => navigate('/dashboard/redeem')}

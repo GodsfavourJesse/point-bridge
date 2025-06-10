@@ -6,6 +6,7 @@ import { db, storage } from '../firebase/firebase';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { auth } from '../firebase/firebase';
 import { getDoc } from 'firebase/firestore';
+import Logout from '../components/Logout';
 
 const Settings = () => {
     const [avatar, setAvatar] = useState(null);
@@ -299,6 +300,7 @@ const Settings = () => {
                 </div>
             )}
 
+
             {/* Danger Zone */}
             <div className="bg-red-50 border border-red-200 shadow rounded-xl p-5">
                 <h3 className="text-lg font-semibold text-red-600 mb-4">Danger Zone</h3>
@@ -306,6 +308,8 @@ const Settings = () => {
                     Delete Account
                 </button>
             </div>
+            
+            <Logout />
         </div>
     );
 };

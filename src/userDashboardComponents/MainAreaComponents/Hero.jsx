@@ -49,7 +49,7 @@ const Hero = () => {
             </h1>
             <p className='text-gray-200'>
                 Welcome back! Here’s a quick guide on how to earn more points on 
-                <span onClick={() => navigate('/dashboard/tasks')} className='underline ml-1 hover:text-blue-300 cursor-pointer'>points bridge</span>
+                <span onClick={() => navigate('/dashboard/tasks')} className='underline ml-1 hover:text-blue-300 cursor-pointer'>point bridge</span>
                 .
             </p>
         </div>
