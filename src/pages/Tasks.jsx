@@ -13,15 +13,25 @@ export default function TaskPage() {
     // Fetch user points
     useEffect(() => {
         if (!user) return;
+
         const fetchPoints = async () => {
-            const docRef = doc(db, 'users', user.uid);
-            const docSnap = await getDoc(docRef);
-            if (docSnap.exists()) {
-                setPoints(docSnap.data().points || 0);
+            try {
+                const docRef = doc(db, 'users', user.uid);
+                const docSnap = await getDoc(docRef);
+                if (docSnap.exists()) {
+                    setPoints(docSnap.data().points || 0);
+                }
+                setLoading(false); // ✅ add this line
+            } catch (err) {
+                console.error('Error fetching user data:', err);
+                setError(true);
+                setLoading(false); // ✅ also set loading to false on error
             }
         };
+
         fetchPoints();
     }, [user]);
+
 
 
      return (
