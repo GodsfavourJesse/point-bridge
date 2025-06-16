@@ -7,13 +7,21 @@ import Dashboard from "./pages/Dashboard";
 import Tasks from "./pages/Tasks";
 import Redeem from "./pages/Redeem";
 import Refer from "./pages/Refer"
-import ResetConfirmation from "./validation/validation-component/ResetConfirmation";
+// import ResetConfirmation from "./validation/validation-component/ResetConfirmation";
 import ForgotPassword from "./validation/ForgotPassword";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Settings from "./pages/Settings";
 import About from "./pages/About";
 import MainLayout from "./userDashboardComponents/MainAreaComponents/MainLayout";
+import AdminLogin from "./admin/AdminLogin";
+// import AdminRoute from "./admin/AdminRoute";
+import UsersManager from "./admin/UsersManager";
+import TasksManager from "./admin/TasksManager";
+import WithdrawalsManager from "./admin/WithdrawalsManager";
+import AdminProtectedRoute from './admin/AdminProtectedRoute';
+import AdminLayout from './admin/AdminLayout';
+import AdminSettings from "./admin/AdminSettings";
 
 function App() {
     return (
@@ -35,6 +43,22 @@ function App() {
                     </Route>
 
                     <Route path="/forgot-password" element={<ForgotPassword />} />
+
+                    <Route path="/admin/login" element={<AdminLogin />} />
+                    <Route
+                        path="/admin/*"
+                        element={
+                            <AdminProtectedRoute>
+                                <AdminLayout />
+                            </AdminProtectedRoute>
+                        }
+                    >
+                        <Route path="dashboard" element={<TasksManager />} />
+                        <Route path="users" element={<UsersManager />} />
+                        <Route path="withdrawals" element={<WithdrawalsManager />} />
+                        <Route path="settings" element={<AdminSettings />} />
+                    </Route>
+
                 </Routes>
             </BrowserRouter>
         </>
