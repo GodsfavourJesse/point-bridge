@@ -1,8 +1,9 @@
 import React, { useState, useEffect, useRef } from "react";
 import { exportToPDF } from "../adminUtils/exportPDF";
 import { printPage } from "../adminUtils/PrintPage";
+import DropdownOptions from "./DropdownOptions"
 import * as XLSX from "xlsx";
-import { FaFileCsv, FaFilePdf, FaFileExcel, FaPrint, FaCloudDownloadAlt } from "react-icons/fa";
+import { FaCloudDownloadAlt } from "react-icons/fa";
 
 export default function ExportDropdown({ data }) {
     const [open, setOpen] = useState(false);
@@ -65,40 +66,29 @@ export default function ExportDropdown({ data }) {
                 Export
             </button>
 
+            {/* Desktop Dropdown */}
             {open && (
-                <div className="absolute right-0 z-10 mt-2 w-52 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-gray-300 ring-opacity-5 transition-all duration-300">
-                    <div className="py-1 text-sm text-gray-700">
+                <div className="hidden md:block absolute right-0 z-10 mt-2 w-52 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-gray-300 ring-opacity-5 transition-all duration-300">
+                    <DropdownOptions />
+                </div>
+            )}
+
+            {/* Mobile Fullscreen Dropdown */}
+            {open && (
+                <div className="md:hidden fixed inset-0 z-50 bg-black bg-opacity-50 flex items-center justify-center">
+                    <div className="w-11/12 max-w-xs bg-white rounded-lg shadow-xl p-4">
+                        <h3 className="text-center text-gray-700 font-medium mb-3">Choose Export Option</h3>
+                        <DropdownOptions />
                         <button
-                            onClick={handleExportCSV}
-                            className="w-full text-left px-4 py-2 hover:bg-gray-100 flex items-center gap-2 cursor-pointer"
+                            onClick={() => setOpen(false)}
+                            className="mt-4 w-full bg-gray-200 text-gray-700 py-2 rounded hover:bg-gray-300 text-sm"
                         >
-                            <FaFileCsv className="text-green-600" />
-                            Export CSV
-                        </button>
-                        <button
-                            onClick={handleExportExcel}
-                            className="w-full text-left px-4 py-2 hover:bg-gray-100 flex items-center gap-2 cursor-pointer"
-                        >
-                            <FaFileExcel className="text-green-700" />
-                            Export Excel
-                        </button>
-                        <button
-                            onClick={handleExportPDF}
-                            className="w-full text-left px-4 py-2 hover:bg-gray-100 flex items-center gap-2 cursor-pointer"
-                        >
-                            <FaFilePdf className="text-red-600" />
-                            Export PDF
-                        </button>
-                        <button
-                            onClick={handlePrint}
-                            className="w-full text-left px-4 py-2 hover:bg-gray-100 flex items-center gap-2 cursor-pointer"
-                        >
-                            <FaPrint className="text-gray-600" />
-                            Print Page
+                            Cancel
                         </button>
                     </div>
                 </div>
             )}
         </div>
     );
+
 }
