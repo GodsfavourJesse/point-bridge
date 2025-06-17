@@ -3,8 +3,7 @@ import { collection, onSnapshot, updateDoc, doc, query } from "firebase/firestor
 import { db } from "../firebase/firebase";
 import { paginate } from "./adminUtils/pagination";
 import SearchBar from "./adminManagerComponents/SearchBar";
-// import WithdrawalsTable from "./adminManagerComponents/WithdrawalsTable.jsx";
-import WithdrawalsTable from "./adminManagerComponents/WithdrawalsTable"
+import WithdrawalsTable from "./adminManagerComponents/WithdrawalsTable.jsx";
 import StatusFilter from "./adminManagerComponents/StatusFilter";
 import WithdrawalStats from "./adminManagerComponents/WithdrawalStats";
 import DateRangeFilter from "./adminManagerComponents/DateRangeFilter";
