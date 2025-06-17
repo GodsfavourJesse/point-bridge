@@ -1,6 +1,6 @@
 import React from "react";
 
-export default function WithdrawalsTable({ withdrawals, updateStatus }) {
+export default function WithdrawalsTableBox({ withdrawals, updateStatus }) {
     if (withdrawals.length === 0) return <p>No withdrawal requests found.</p>;
 
     return (

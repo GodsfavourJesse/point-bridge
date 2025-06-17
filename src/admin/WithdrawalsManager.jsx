@@ -3,12 +3,12 @@ import { collection, onSnapshot, updateDoc, doc, query } from "firebase/firestor
 import { db } from "../firebase/firebase";
 import { paginate } from "./adminUtils/pagination";
 import SearchBar from "./adminManagerComponents/SearchBar";
-import WithdrawalsTable from "./adminManagerComponents/WithdrawalsTable.jsx";
 import StatusFilter from "./adminManagerComponents/StatusFilter";
 import WithdrawalStats from "./adminManagerComponents/WithdrawalStats";
 import DateRangeFilter from "./adminManagerComponents/DateRangeFilter";
 import Pagination from "./adminManagerComponents/Pagination";
 import ExportDropdown from "./adminManagerComponents/ExportDropdown";
+import WithdrawalsTableBox from "./adminManagerComponents/WithdrawalsTableBox.jsx";
 
 
 export default function WithdrawalsManager() {
@@ -79,7 +79,7 @@ export default function WithdrawalsManager() {
 
             </div>
 
-            <WithdrawalsTable withdrawals={paginatedData} updateStatus={updateStatus} />
+            <WithdrawalsTableBox withdrawals={paginatedData} updateStatus={updateStatus} />
 
             <Pagination
                 currentPage={currentPage}
