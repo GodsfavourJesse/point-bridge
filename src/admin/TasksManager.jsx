@@ -1,4 +1,3 @@
-// TaskManager.jsx
 import React, { useEffect, useState } from "react";
 import { db } from "../firebase/firebase";
 import { collection, getDocs, addDoc, updateDoc, deleteDoc, doc } from "firebase/firestore";
@@ -9,14 +8,14 @@ import TaskCard from "./adminManagerComponents/TaskCard";
 import TaskAnalyticsChart from "./adminManagerComponents/TaskAnalyticsChart";
 
 export default function TaskManager() {
-  const [tasks, setTasks] = useState([]);
+    const [tasks, setTasks] = useState([]);
     const [form, setForm] = useState({ title: '', type: '', description: '', link: '', status: 'active' });
     const [editingId, setEditingId] = useState(null);
     const [currentPage, setCurrentPage] = useState(1);
     const tasksPerPage = 5;
     const tasksRef = collection(db, 'tasks');
 
-  useEffect(() => {
+    useEffect(() => {
         const fetchTasks = async () => {
             const snapshot = await getDocs(tasksRef);
             const taskData = snapshot.docs.map(doc => ({ ...doc.data(), docId: doc.id }));
@@ -41,7 +40,7 @@ export default function TaskManager() {
         setForm({ title: '', type: '', description: '', link: '', status: 'active' });
     };
 
-  const handleEdit = task => {
+    const handleEdit = task => {
         setForm(task);
         setEditingId(task.docId);
     };
@@ -51,7 +50,7 @@ export default function TaskManager() {
         setTasks(tasks.filter(task => task.docId !== id));
     };
 
-  const toggleTaskStatus = async (task) => {
+    const toggleTaskStatus = async (task) => {
         const updatedStatus = task.status === 'active' ? 'inactive' : 'active';
         const taskDoc = doc(db, 'tasks', task.docId);
         await updateDoc(taskDoc, { status: updatedStatus });
@@ -64,15 +63,16 @@ export default function TaskManager() {
     const currentTasks = tasks.slice(indexOfFirstTask, indexOfLastTask);
     const totalPages = Math.ceil(tasks.length / tasksPerPage);
 
-    const nextPage = () => setCurrentPage((prev) => Math.min(prev + 1, totalPages));
-    const prevPage = () => setCurrentPage((prev) => Math.max(prev - 1, 1));
+    const nextPage = () => setCurrentPage(prev => Math.min(prev + 1, totalPages));
+    const prevPage = () => setCurrentPage(prev => Math.max(prev - 1, 1));
 
-
-  return (
+    return (
         <>
             <WelcomePopup />
-            <div className="p-6">
-                <h1 className="text-2xl font-bold mb-4">Task Manager</h1>
+            <div className="p-4 sm:p-6 lg:p-8 max-w-screen-xl mx-auto">
+                <h1 className="text-xl sm:text-2xl font-bold mb-6 text-center sm:text-left">
+                    Task Manager
+                </h1>
 
                 <TaskForm
                     form={form}
@@ -83,7 +83,7 @@ export default function TaskManager() {
 
                 <TaskAnalyticsChart tasks={tasks} />
 
-                <div className="space-y-4 mt-6">
+                <div className="mt-8 space-y-5">
                     {currentTasks.length > 0 ? currentTasks.map(task => (
                         <TaskCard
                             key={task.docId}
@@ -92,23 +92,35 @@ export default function TaskManager() {
                             handleDelete={handleDelete}
                             toggleTaskStatus={toggleTaskStatus}
                         />
-                    )) : <p className="text-gray-600">No task added yet.</p>}
+                    )) : (
+                        <p className="text-center text-gray-500 mt-6">No tasks added yet.</p>
+                    )}
                 </div>
 
                 {/* Pagination */}
-                <div className="mt-6 flex justify-between max-w-xl">
-                    <button
-                        onClick={prevPage}
-                        disabled={currentPage === 1}
-                        className="px-4 py-2 bg-gray-300 rounded disabled:opacity-50"
-                    >Previous</button>
-                    <span className="text-sm text-gray-700">Page {currentPage} of {totalPages}</span>
-                    <button
-                        onClick={nextPage}
-                        disabled={currentPage === totalPages}
-                        className="px-4 py-2 bg-gray-300 rounded disabled:opacity-50"
-                    >Next</button>
-                </div>
+                {tasks.length > tasksPerPage && (
+                    <div className="mt-10 flex flex-col sm:flex-row items-center justify-center sm:justify-between gap-4">
+                        <button
+                            onClick={prevPage}
+                            disabled={currentPage === 1}
+                            className="px-4 py-2 bg-gray-200 hover:bg-gray-300 rounded disabled:opacity-50 w-full sm:w-auto"
+                        >
+                            ⬅️ Previous
+                        </button>
+
+                        <span className="text-sm text-gray-600">
+                            Page <strong>{currentPage}</strong> of <strong>{totalPages}</strong>
+                        </span>
+
+                        <button
+                            onClick={nextPage}
+                            disabled={currentPage === totalPages}
+                            className="px-4 py-2 bg-gray-200 hover:bg-gray-300 rounded disabled:opacity-50 w-full sm:w-auto"
+                        >
+                            Next ➡️
+                        </button>
+                    </div>
+                )}
             </div>
         </>
     );
