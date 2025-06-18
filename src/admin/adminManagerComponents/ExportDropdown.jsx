@@ -69,7 +69,12 @@ export default function ExportDropdown({ data }) {
             {/* Desktop Dropdown */}
             {open && (
                 <div className="hidden md:block absolute right-0 z-10 mt-2 w-52 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-gray-300 ring-opacity-5 transition-all duration-300">
-                    <DropdownOptions />
+                    <DropdownOptions
+                        handleExportCSV={handleExportCSV}
+                        handleExportExcel={handleExportExcel}
+                        handleExportPDF={handleExportPDF}
+                        handlePrint={handlePrint}
+                    />
                 </div>
             )}
 
@@ -78,7 +83,12 @@ export default function ExportDropdown({ data }) {
                 <div className="md:hidden fixed inset-0 z-50 bg-black bg-opacity-50 flex items-center justify-center">
                     <div className="w-11/12 max-w-xs bg-white rounded-lg shadow-xl p-4">
                         <h3 className="text-center text-gray-700 font-medium mb-3">Choose Export Option</h3>
-                        <DropdownOptions />
+                        <DropdownOptions
+                            handleExportCSV={handleExportCSV}
+                            handleExportExcel={handleExportExcel}
+                            handleExportPDF={handleExportPDF}
+                            handlePrint={handlePrint}
+                        />
                         <button
                             onClick={() => setOpen(false)}
                             className="mt-4 w-full bg-gray-200 text-gray-700 py-2 rounded hover:bg-gray-300 text-sm"

@@ -8,11 +8,11 @@ const AdminLayout = () => {
         <div className="flex flex-col min-h-screen">
             {/* Desktop Sidebar */}
             <div className="flex flex-1">
-                <div className="hidden md:flex">
+                <div className="hidden md:flex h-screen fixed">
                     <AdminSidebar />
                 </div>
 
-                <main className="flex-1 p-4">
+                <main className="flex-1 p-4 md:ml-64">
                     <Outlet />
                 </main>
             </div>

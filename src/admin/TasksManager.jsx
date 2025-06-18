@@ -1,17 +1,22 @@
-import React, { useState, useEffect } from 'react';
-import { db } from '../firebase/firebase';
-import { collection, getDocs, addDoc, updateDoc, deleteDoc, doc, } from 'firebase/firestore';
-import { v4 as uuidv4 } from 'uuid';
-import WelcomePopup from './adminManagerComponents/WelcomePopup';
+// TaskManager.jsx
+import React, { useEffect, useState } from "react";
+import { db } from "../firebase/firebase";
+import { collection, getDocs, addDoc, updateDoc, deleteDoc, doc } from "firebase/firestore";
+import { v4 as uuidv4 } from "uuid";
+import WelcomePopup from "./adminManagerComponents/WelcomePopup";
+import TaskForm from "./adminManagerComponents/TaskForm";
+import TaskCard from "./adminManagerComponents/TaskCard";
+import TaskAnalyticsChart from "./adminManagerComponents/TaskAnalyticsChart";
 
 export default function TaskManager() {
-    const [tasks, setTasks] = useState([]);
-    const [form, setForm] = useState({ title: '', type: '', description: '', link: '' });
+  const [tasks, setTasks] = useState([]);
+    const [form, setForm] = useState({ title: '', type: '', description: '', link: '', status: 'active' });
     const [editingId, setEditingId] = useState(null);
+    const [currentPage, setCurrentPage] = useState(1);
+    const tasksPerPage = 5;
     const tasksRef = collection(db, 'tasks');
 
-    // Fetch tasks on load
-    useEffect(() => {
+  useEffect(() => {
         const fetchTasks = async () => {
             const snapshot = await getDocs(tasksRef);
             const taskData = snapshot.docs.map(doc => ({ ...doc.data(), docId: doc.id }));
@@ -20,105 +25,89 @@ export default function TaskManager() {
         fetchTasks();
     }, []);
 
-    // Add or Update Task
     const handleSubmit = async e => {
         e.preventDefault();
         if (editingId) {
-            // Update task
             const taskDoc = doc(db, 'tasks', editingId);
             await updateDoc(taskDoc, form);
             setEditingId(null);
         } else {
-            // Add task
             const newTask = { ...form, id: uuidv4() };
             await addDoc(tasksRef, newTask);
         }
 
-        // Refresh
         const snapshot = await getDocs(tasksRef);
         setTasks(snapshot.docs.map(doc => ({ ...doc.data(), docId: doc.id })));
-        setForm({ title: '', type: '', description: '', link: '' });
+        setForm({ title: '', type: '', description: '', link: '', status: 'active' });
     };
 
-    // Edit Task
-    const handleEdit = task => {
+  const handleEdit = task => {
         setForm(task);
         setEditingId(task.docId);
     };
 
-    // Delete Task
     const handleDelete = async id => {
         await deleteDoc(doc(db, 'tasks', id));
         setTasks(tasks.filter(task => task.docId !== id));
     };
 
-    return (
+  const toggleTaskStatus = async (task) => {
+        const updatedStatus = task.status === 'active' ? 'inactive' : 'active';
+        const taskDoc = doc(db, 'tasks', task.docId);
+        await updateDoc(taskDoc, { status: updatedStatus });
+        const updatedTasks = tasks.map(t => t.docId === task.docId ? { ...t, status: updatedStatus } : t);
+        setTasks(updatedTasks);
+    };
+
+    const indexOfLastTask = currentPage * tasksPerPage;
+    const indexOfFirstTask = indexOfLastTask - tasksPerPage;
+    const currentTasks = tasks.slice(indexOfFirstTask, indexOfLastTask);
+    const totalPages = Math.ceil(tasks.length / tasksPerPage);
+
+    const nextPage = () => setCurrentPage((prev) => Math.min(prev + 1, totalPages));
+    const prevPage = () => setCurrentPage((prev) => Math.max(prev - 1, 1));
+
+
+  return (
         <>
             <WelcomePopup />
             <div className="p-6">
                 <h1 className="text-2xl font-bold mb-4">Task Manager</h1>
 
-                {/* Task Form */}
-                <form onSubmit={handleSubmit} className="space-y-3 mb-6 max-w-xl">
-                    <input
-                        type="text"
-                        placeholder="Title"
-                        className="w-full p-2 border"
-                        value={form.title}
-                        onChange={e => setForm({ ...form, title: e.target.value })}
-                        required
-                    />
-                    <input
-                        type="text"
-                        placeholder="Type (e.g. video, link)"
-                        className="w-full p-2 border"
-                        value={form.type}
-                        onChange={e => setForm({ ...form, type: e.target.value })}
-                        required
-                    />
-                    <input
-                        type="text"
-                        placeholder="Description"
-                        className="w-full p-2 border"
-                        value={form.description}
-                        onChange={e => setForm({ ...form, description: e.target.value })}
-                        required
-                    />
-                    <input
-                        type="url"
-                        placeholder="Link"
-                        className="w-full p-2 border"
-                        value={form.link}
-                        onChange={e => setForm({ ...form, link: e.target.value })}
-                        required
-                    />
-                    <button className="bg-blue-600 text-white px-4 py-2 rounded">
-                        {editingId ? 'Update Task' : 'Add Task'}
-                    </button>
-                </form>
+                <TaskForm
+                    form={form}
+                    setForm={setForm}
+                    handleSubmit={handleSubmit}
+                    editingId={editingId}
+                />
 
-                {/* Task List */}
-                <div className="space-y-4">
-                    {tasks.map(task => (
-                        <div key={task.docId} className="p-4 border rounded shadow-sm flex justify-between items-start">
-                            <div>
-                                <h2 className="text-lg font-semibold">{task.title}</h2>
-                                <p className="text-sm text-gray-700">{task.description}</p>
-                                <p className="text-xs text-gray-500">Type: {task.type}</p>
-                                <a href={task.link} className="text-blue-500 text-sm" target="_blank" rel="noopener noreferrer">
-                                    {task.link}
-                                </a>
-                            </div>
-                            <div className="flex gap-2">
-                                <button onClick={() => handleEdit(task)} className="bg-yellow-500 text-white px-2 py-1 rounded">
-                                    Edit
-                                </button>
-                                <button onClick={() => handleDelete(task.docId)} className="bg-red-600 text-white px-2 py-1 rounded">
-                                    Delete
-                                </button>
-                            </div>
-                        </div>
-                    ))}
+                <TaskAnalyticsChart tasks={tasks} />
+
+                <div className="space-y-4 mt-6">
+                    {currentTasks.length > 0 ? currentTasks.map(task => (
+                        <TaskCard
+                            key={task.docId}
+                            task={task}
+                            handleEdit={handleEdit}
+                            handleDelete={handleDelete}
+                            toggleTaskStatus={toggleTaskStatus}
+                        />
+                    )) : <p className="text-gray-600">No task added yet.</p>}
+                </div>
+
+                {/* Pagination */}
+                <div className="mt-6 flex justify-between max-w-xl">
+                    <button
+                        onClick={prevPage}
+                        disabled={currentPage === 1}
+                        className="px-4 py-2 bg-gray-300 rounded disabled:opacity-50"
+                    >Previous</button>
+                    <span className="text-sm text-gray-700">Page {currentPage} of {totalPages}</span>
+                    <button
+                        onClick={nextPage}
+                        disabled={currentPage === totalPages}
+                        className="px-4 py-2 bg-gray-300 rounded disabled:opacity-50"
+                    >Next</button>
                 </div>
             </div>
         </>
