@@ -7,7 +7,7 @@ import SocialCard from './SocialCard';
 import Footer from '../../components/Footer';
 import GreetingsCard from "./GreetingsCard";
 import TaskCard from "../../components/TaskCard";
-import InfoCard from "./InfoCad";
+import InfoCard from "./InfoCard";
 import Hero from "./Hero";
 
 const MainLayout = ({ username }) => {

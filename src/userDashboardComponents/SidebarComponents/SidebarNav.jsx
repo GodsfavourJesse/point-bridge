@@ -1,6 +1,4 @@
-// components/sidebar/SidebarNav.jsx
 import React from 'react';
-import { FiLink } from 'react-icons/fi';
 import { NavLink } from 'react-router-dom';
 import { Home, CheckCircle, Gift, Users, Settings } from 'lucide-react';
 import { FaInfoCircle } from 'react-icons/fa';

@@ -2,18 +2,20 @@ import React, { useEffect, useState } from "react";
 import { db } from "../firebase/firebase";
 import { collection, getDocs, addDoc, updateDoc, deleteDoc, doc } from "firebase/firestore";
 import { v4 as uuidv4 } from "uuid";
+import ReactPaginate from "react-paginate";
 import WelcomePopup from "./adminManagerComponents/WelcomePopup";
-import TaskForm from "./adminManagerComponents/TaskForm";
-import TaskCard from "./adminManagerComponents/TaskCard";
+import AdminTaskForm from "./adminManagerComponents/AdminTaskForm";
+import AdminTaskCard from "./adminManagerComponents/AdminTaskCard";
 import TaskAnalyticsChart from "./adminManagerComponents/TaskAnalyticsChart";
 
 export default function TaskManager() {
     const [tasks, setTasks] = useState([]);
     const [form, setForm] = useState({ title: '', type: '', description: '', link: '', status: 'active' });
     const [editingId, setEditingId] = useState(null);
-    const [currentPage, setCurrentPage] = useState(1);
-    const tasksPerPage = 5;
+    const [currentPage, setCurrentPage] = useState(0);
+    const [tasksPerPage, setTasksPerPage] = useState(5);
     const tasksRef = collection(db, 'tasks');
+    const offset = currentPage * tasksPerPage;
 
     useEffect(() => {
         const fetchTasks = async () => {
@@ -58,34 +60,56 @@ export default function TaskManager() {
         setTasks(updatedTasks);
     };
 
-    const indexOfLastTask = currentPage * tasksPerPage;
-    const indexOfFirstTask = indexOfLastTask - tasksPerPage;
-    const currentTasks = tasks.slice(indexOfFirstTask, indexOfLastTask);
-    const totalPages = Math.ceil(tasks.length / tasksPerPage);
+    const currentTasks = tasks.slice(offset, offset + tasksPerPage);
+    const pageCount = Math.ceil(tasks.length / tasksPerPage);
 
-    const nextPage = () => setCurrentPage(prev => Math.min(prev + 1, totalPages));
-    const prevPage = () => setCurrentPage(prev => Math.max(prev - 1, 1));
+    const handlePageClick = ({ selected }) => {
+        setCurrentPage(selected);
+    };
 
     return (
         <>
             <WelcomePopup />
             <div className="p-4 sm:p-6 lg:p-8 max-w-screen-xl mx-auto">
-                <h1 className="text-xl sm:text-2xl font-bold mb-6 text-center sm:text-left">
-                    Task Manager
-                </h1>
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between sticky top-0 bg-white z-10 py-2">
+                    <h1 className="text-xl sm:text-2xl font-bold mb-2 sm:mb-0">Task Manager</h1>
+                    <div className="flex items-center gap-2">
+                        <label htmlFor="tasksPerPage" className="text-sm text-gray-700">Tasks per page:</label>
+                        <select
+                            id="tasksPerPage"
+                            className="border rounded px-2 py-1"
+                            value={tasksPerPage}
+                            onChange={(e) => {
+                                setTasksPerPage(Number(e.target.value));
+                                setCurrentPage(0);
+                            }}
+                        >
+                            {[3, 6, 9, 12].map(n => <option key={n} value={n}>{n}</option>)}
+                        </select>
+                    </div>
+                </div>
 
-                <TaskForm
-                    form={form}
-                    setForm={setForm}
-                    handleSubmit={handleSubmit}
-                    editingId={editingId}
-                />
+                <div className="fixed bottom-4 right-4 sm:hidden">
+                    <button
+                        onClick={() => document.getElementById("task-form-section").scrollIntoView({ behavior: 'smooth' })}
+                        className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-full shadow-lg"
+                    >+ Add Task</button>
+                </div>
+
+                <div id="task-form-section">
+                    <AdminTaskForm
+                        form={form}
+                        setForm={setForm}
+                        handleSubmit={handleSubmit}
+                        editingId={editingId}
+                    />
+                </div>
 
                 <TaskAnalyticsChart tasks={tasks} />
 
                 <div className="mt-8 space-y-5">
                     {currentTasks.length > 0 ? currentTasks.map(task => (
-                        <TaskCard
+                        <AdminTaskCard
                             key={task.docId}
                             task={task}
                             handleEdit={handleEdit}
@@ -99,26 +123,20 @@ export default function TaskManager() {
 
                 {/* Pagination */}
                 {tasks.length > tasksPerPage && (
-                    <div className="mt-10 flex flex-col sm:flex-row items-center justify-center sm:justify-between gap-4">
-                        <button
-                            onClick={prevPage}
-                            disabled={currentPage === 1}
-                            className="px-4 py-2 bg-gray-200 hover:bg-gray-300 rounded disabled:opacity-50 w-full sm:w-auto"
-                        >
-                            ⬅️ Previous
-                        </button>
-
-                        <span className="text-sm text-gray-600">
-                            Page <strong>{currentPage}</strong> of <strong>{totalPages}</strong>
-                        </span>
-
-                        <button
-                            onClick={nextPage}
-                            disabled={currentPage === totalPages}
-                            className="px-4 py-2 bg-gray-200 hover:bg-gray-300 rounded disabled:opacity-50 w-full sm:w-auto"
-                        >
-                            Next ➡️
-                        </button>
+                    <div className="mt-10">
+                        <ReactPaginate
+                            previousLabel={"⬅️"}
+                            nextLabel={"➡️"}
+                            breakLabel={"..."}
+                            pageCount={pageCount}
+                            onPageChange={handlePageClick}
+                            containerClassName="flex justify-center gap-2 flex-wrap"
+                            pageClassName="px-3 py-1 bg-gray-200 rounded"
+                            activeClassName="bg-blue-600 text-white"
+                            previousClassName="px-3 py-1 bg-gray-300 rounded"
+                            nextClassName="px-3 py-1 bg-gray-300 rounded"
+                            disabledClassName="opacity-50 cursor-not-allowed"
+                        />
                     </div>
                 )}
             </div>

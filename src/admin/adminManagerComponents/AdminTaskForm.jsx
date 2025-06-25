@@ -1,8 +1,21 @@
 import React from 'react';
 
-export default function TaskForm({ form, setForm, handleSubmit, editingId }) {
+export default function AdminTaskForm({ form, setForm, handleSubmit, editingId }) {
     return (
         <div className="w-full px-4 sm:px-6 md:px-8">
+            <select
+                className="w-full px-4 py-2 border border-gray-300 mb-4 mt-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 transition"
+                value={form.type}
+                onChange={e => setForm({ ...form, type: e.target.value })}
+                required
+            >
+                <option value="">Select Task Type</option>
+                <option value="video">🎥 Video</option>
+                <option value="survey">📝 Survey</option>
+                <option value="ads">📢 Ad</option>
+                <option value="gaming">🎮 Game</option>
+            </select>
+
             <form
                 onSubmit={handleSubmit}
                 className="space-y-4 mb-8 max-w-2xl w-full mx-auto bg-white p-5 sm:p-6 md:p-8 rounded-xl shadow-lg"
@@ -46,6 +59,15 @@ export default function TaskForm({ form, setForm, handleSubmit, editingId }) {
                     onChange={e => setForm({ ...form, link: e.target.value })}
                     required
                 />
+
+                <input
+                    type="checkbox"
+                    checked={form.allowBonus || false}
+                    onChange={(e) => setForm({ ...form, allowBonus: e.target.checked })}
+                    className="mr-2"
+                />
+                <label>Allow Extra Points (Show Adsterra Smartlink)</label>
+
 
                 <div className="flex flex-col sm:flex-row justify-end gap-3 pt-2">
                     <button

@@ -1,6 +1,6 @@
 import React from 'react';
 
-export default function TaskCard({ task, handleEdit, handleDelete, toggleTaskStatus }) {
+export default function AdminTaskCard({ task, handleEdit, handleDelete, toggleTaskStatus }) {
     return (
         <div className="p-5 border border-gray-200 rounded-2xl shadow-sm bg-gradient-to-br from-white via-blue-50 to-white hover:shadow-lg transition duration-300 flex flex-col md:flex-row justify-between gap-4 sm:gap-6">
             {/* Content Section */}

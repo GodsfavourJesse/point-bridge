@@ -34,32 +34,32 @@ const Hero = () => {
     }, []);
 
 
-  return (
-    <div
-        className='relative flex flex-col'
-    >
+    return (
+        <div
+            className='relative flex flex-col'
+        >
 
-        <div className='relative z-10 flex flex-col gap-1'>
+            <div className='relative z-10 flex flex-col gap-1'>
 
-            <h3 className='text-white'>{currentDate}</h3>
-            <h1 className='text-gray-100 text-2xl font-semibold'>Hello, 
-                <span className='pl-2'>
-                    {username}
-                </span>
-            </h1>
-            <p className='text-gray-200'>
-                Welcome back! Here’s a quick guide on how to earn more points on 
-                <span onClick={() => navigate('/dashboard/tasks')} className='underline ml-1 hover:text-blue-300 cursor-pointer'>point bridge</span>
-                .
-            </p>
+                <h3 className='text-white'>{currentDate}</h3>
+                <h1 className='text-gray-100 text-2xl font-semibold'>Hello, 
+                    <span className='pl-2'>
+                        {username}
+                    </span>
+                </h1>
+                <p className='text-gray-200'>
+                    Welcome back! Here’s a quick guide on how to earn more points on 
+                    <span onClick={() => navigate('/dashboard/tasks')} className='underline ml-1 hover:text-blue-300 cursor-pointer'>point bridge</span>
+                    .
+                </p>
+            </div>
+
+            <button className='hidden md:flex absolute right-20 bg-white rounded-xl border border-white py-2 px-4 text-blue-500 text-[14px] font-medium cursor-pointer shadow hover:bg-blue-100 font-medium text-sm transition-all duration-300 z-10'>
+                Copy Link
+            </button>
+            
         </div>
-
-        <button className='hidden md:flex absolute right-20 bg-white rounded-xl border border-white py-2 px-4 text-blue-500 text-[14px] font-medium cursor-pointer shadow hover:bg-blue-100 font-medium text-sm transition-all duration-300 z-10'>
-            Copy Link
-        </button>
-        
-    </div>
-  )
+    )
 }
 
 export default Hero
